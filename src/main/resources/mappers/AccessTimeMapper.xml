@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.truck.dao.AccessTimeMapper" >
+  <resultMap id="BaseResultMap" type="com.truck.pojo.AccessTime" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="driver_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="previous_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, admin_id, device_id, driver_id, previous_id, address, create_time,
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from truck_device_access_time
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from truck_device_access_time
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.truck.pojo.AccessTime" >
+    insert into truck_device_access_time (id, admin_id, device_id, 
+      driver_id, previous_id, address,  create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER}, 
+      #{driverId,jdbcType=INTEGER}, #{previousId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.truck.pojo.AccessTime" useGeneratedKeys="true" keyProperty="id">
+    insert into truck_device_access_time
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="driverId != null" >
+        driver_id,
+      </if>
+      <if test="previousId != null" >
+        previous_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+        create_time,
+        update_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null" >
+        #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="previousId != null" >
+        #{previousId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+        now(),
+        now(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.truck.pojo.AccessTime" >
+    update truck_device_access_time
+    <set >
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null" >
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="previousId != null" >
+        previous_id = #{previousId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        update_time = now(),
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.truck.pojo.AccessTime" >
+    update truck_device_access_time
+    set admin_id = #{adminId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=INTEGER},
+      driver_id = #{driverId,jdbcType=INTEGER},
+      previous_id = #{previousId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+  <delete id="deleteByIdAdminId" parameterType="map" >
+    delete from truck_device_access_time
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+  </delete>
+
+  <select id="selectByIdAdminId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_access_time
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+    order by create_time
+  </select>
+
+  <select id="selectLastByDeviceId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_access_time
+    where device_id = #{deviceId,jdbcType=INTEGER}
+    order by create_time desc limit 1
+  </select>
+
+  <select id="selectByAdminIdDate" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_access_time
+    <where>
+
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="deviceId!=null">
+        and device_id = #{deviceId}
+      </if>
+      <if test="driverId!=null">
+        and driver_id = #{driverId}
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    order by create_time
+  </select>
+
+  <select id="selectNumByAdminIdDate" resultType="integer" parameterType="map" >
+    select
+    count(*)
+    from truck_device_access_time
+    <where>
+
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="deviceId!=null">
+        and device_id = #{deviceId}
+      </if>
+      <if test="driverId!=null">
+        and driver_id = #{driverId}
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    order by create_time
+  </select>
+
+  <select id="selectDate" resultType="date" parameterType="map" >
+    select
+    DATE_FORMAT(create_time,'%Y-%m-%d')
+    from truck_device_access_time
+    where device_id = #{deviceId,jdbcType=INTEGER}
+    <if test="beginDate != null">
+      <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+    </if>
+    GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d')
+  </select>
+
+  <select id="selectByAdminDate" resultType="map" parameterType="map">
+    select a.sum as roundTriptimes,a.admin_name as adminName from (
+      select sum(a.sum) as sum,a.admin_name from (
+        select a.sum as sum,c.admin_name as admin_name,b.admin_id as admin_id from (
+          select count(1) as sum,driver_id from truck_device_access_time
+            <where>
+              <if test="searchDate != null">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+              </if>
+              <if test="beginDate != null">
+                <![CDATA[
+                and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+                ]]>
+              </if>
+              <if test="endDate != null">
+                <![CDATA[
+                and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+                ]]>
+              </if>
+            </where>
+          group by driver_id
+        )a
+        left join truck_device_admin b on a.driver_id = b.id
+        join truck_admin c on b.admin_id = c.admin_id
+        <where>
+          <if test="adminId !=null">
+            and b.admin_id =#{adminId}
+          </if>
+          <if test="adminName !=null">
+            and c.admin_name =#{adminName}
+          </if>
+        </where>
+      )a
+      group by a.admin_id
+    ) a
+  </select>
+
+  <select id="selectByDeviceDate" resultType="map" parameterType="map">
+    select a.sum as roundTriptimes,a.device_id as deviceId,a.device_no as deviceNo,a.category_no as categoryNo from(
+      select a.sum,a.device_id,b.device_no,b.category_no from (
+        select count(1) as sum,device_id as device_id from truck_device_access_time
+            <where>
+              <if test="searchDate != null">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+              </if>
+              <if test="beginDate != null">
+                <![CDATA[
+                and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+                ]]>
+              </if>
+              <if test="endDate != null">
+                <![CDATA[
+                and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+                ]]>
+              </if>
+            </where>
+           group by device_id
+           )a
+           join truck_device b on a.device_id = b.id
+          <where>
+            <if test="deviceId !=null">
+              and b.id =#{deviceId}
+            </if>
+            <if test="categoryNo !=null">
+              and b.category_no =#{categoryNo}
+            </if>
+          </where>
+          )a
+  </select>
+
+  <select id="selectRankByAdminDate" resultType="map" parameterType="map">
+    select a.sum as roundTriptimes,a.admin_name as adminName from (
+      select sum(a.sum) as sum,a.admin_name  from (
+        select a.sum as sum,c.admin_name as admin_name,b.admin_id as admin_id from (
+          select count(1) as sum,driver_id from truck_device_access_time
+            <where>
+              <if test="searchDate != null">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+              </if>
+              <if test="beginDate != null">
+                <![CDATA[
+                and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+                ]]>
+              </if>
+              <if test="endDate != null">
+                <![CDATA[
+                and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+                ]]>
+              </if>
+            </where>
+          group by driver_id
+        )a
+        left join truck_device_admin b on a.driver_id = b.id
+        join truck_admin c on b.admin_id = c.admin_id
+      )a
+      group by a.admin_id
+    ) a
+    order by roundTriptimes desc
+  </select>
+
+  <select id="selectRankByDeviceDate" resultType="map" parameterType="map">
+    select a.sum as roundTriptimes,a.device_id as deviceId,a.device_no as deviceNo,a.category_no as categoryNo from(
+      select a.sum,a.device_id,b.device_no,b.category_no from (
+        select count(1) as sum,device_id as device_id from truck_device_access_time
+    <where>
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+           group by device_id
+           )a
+           join truck_device b on a.device_id = b.id
+          <where>
+            <if test="categoryNo !=null">
+              and b.category_no =#{categoryNo}
+            </if>
+          </where>
+          )a
+          order by a.sum desc
+  </select>
+
+  <select id="selectWaJiByAdminDate" resultType="map" parameterType="map">
+  select a.sum as sum,a.admin_id as adminId,a.admin_name as adminName from (
+      select sum(frequency) as sum,a.admin_id as admin_id,b.admin_name as admin_name from truck_device_admin a
+  join truck_admin b on a.admin_id=b.admin_id
+  join truck_device c on a.device_id=c.id
+  where c.category_no = 1
+      <if test="searchDate != null">
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+  group by a.admin_id
+  )a
+  </select>
+
+  <select id="selectWaJiRankByAdminDate" resultType="map" parameterType="map">
+    select a.sum as sum,a.admin_id as adminId,a.admin_name as adminName from (
+    select sum(frequency) as sum,a.admin_id as admin_id,b.admin_name as admin_name from truck_device_admin a
+  join truck_admin b on a.admin_id=b.admin_id
+  join truck_device c on a.device_id=c.id
+  where c.category_no = 1
+      <if test="searchDate != null">
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+  group by a.admin_id
+  )a
+  order by a.sum desc
+  </select>
+
+  <select id="selectWaJiByDeviceDate" resultType="map" parameterType="map">
+  select a.sum as sum,a.device_id as deviceId,a.category_no as categoryNo,a.device_no as deviceNo from (
+  select sum(frequency) as sum,a.device_id as device_id,b.category_no as category_no,b.device_no as device_no from truck_device_admin a
+  join truck_device b on a.device_id=b.id
+  where b.category_no = 1
+      <if test="searchDate != null">
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+  group by device_id
+  )a
+</select>
+
+  <select id="selectWaJiRankByDeviceDate" resultType="map" parameterType="map">
+    select a.sum as sum,a.device_id as deviceId,a.category_no as categoryNo,a.device_no as deviceNo from (
+    select sum(frequency) as sum,a.device_id as device_id,b.category_no as category_no,b.device_no as device_no from truck_device_admin a
+  join truck_device b on a.device_id=b.id
+  where b.category_no = 1
+      <if test="searchDate != null">
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(a.create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+  group by device_id
+  )a
+  order by a.sum desc
+</select>
+
+</mapper>

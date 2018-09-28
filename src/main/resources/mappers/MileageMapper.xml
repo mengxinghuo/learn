@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.truck.dao.MileageMapper" >
+  <resultMap id="BaseResultMap" type="com.truck.pojo.Mileage" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="driver_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device_mileage" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="normal_time" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, admin_id, device_id, driver_id, device_mileage, create_time, update_time, normal_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from truck_device_mileage
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from truck_device_mileage
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.truck.pojo.Mileage" >
+    insert into truck_device_mileage (id, admin_id, device_id, 
+      driver_id, device_mileage, create_time, 
+      update_time, normal_time)
+    values (#{id,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER}, 
+      #{driverId,jdbcType=INTEGER}, #{deviceMileage,jdbcType=BIGINT}, now(),
+      now(), #{normalTime,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.truck.pojo.Mileage" useGeneratedKeys="true" keyProperty="id">
+    insert into truck_device_mileage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="driverId != null" >
+        driver_id,
+      </if>
+      <if test="deviceMileage != null" >
+        device_mileage,
+      </if>
+        create_time,
+        update_time,
+      <if test="normalTime != null" >
+        normal_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null" >
+        #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceMileage != null" >
+        #{deviceMileage,jdbcType=BIGINT},
+      </if>
+      now(),
+      now(),
+      <if test="normalTime != null" >
+        #{normalTime,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.truck.pojo.Mileage" >
+    update truck_device_mileage
+    <set >
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null" >
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceMileage != null" >
+        device_mileage = #{deviceMileage,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        update_time = now(),
+      <if test="normalTime != null" >
+        normal_time = #{normalTime,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.truck.pojo.Mileage" >
+    update truck_device_mileage
+    set admin_id = #{adminId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=INTEGER},
+      driver_id = #{driverId,jdbcType=INTEGER},
+      device_mileage = #{deviceMileage,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now(),
+      normal_time = #{normalTime,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <delete id="deleteByIdAdminId" parameterType="map" >
+    delete from truck_device_mileage
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+  </delete>
+
+  <select id="selectByIdAdminId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_mileage
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+    order by create_time
+  </select>
+
+  <select id="selectByAdminIdDate" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_mileage
+    <where>
+
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="deviceId!=null">
+        and device_id = #{deviceId}
+      </if>
+      <if test="driverId!=null">
+        and driver_id = #{driverId}
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    order by create_time
+  </select>
+
+  <select id="selectNumByAdminIdDate" resultType="integer" parameterType="map" >
+    select
+    sum(device_oil)
+    from truck_device_mileage
+    <where>
+
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="deviceId!=null">
+        and device_id = #{deviceId}
+      </if>
+      <if test="driverId!=null">
+        and driver_id = #{driverId}
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+  </select>
+
+  <select id="selectDate" resultType="date" parameterType="map" >
+    select
+    DATE_FORMAT(create_time,'%Y-%m-%d')
+    from truck_device_mileage
+    where device_id = #{deviceId,jdbcType=INTEGER}
+    <if test="beginDate != null">
+      <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+    </if>
+    GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d')
+  </select>
+
+  <select id="checkDeviceMileage" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_mileage
+    where device_id = #{deviceId,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+    order by id desc Limit 1
+  </select>
+
+</mapper>

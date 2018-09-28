@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.truck.dao.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.truck.pojo.Device" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="product_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="category_no" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="device_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="factory_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, admin_id, product_id, category_no, device_no, create_time, update_time,device_name,factory_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from truck_device
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from truck_device
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.truck.pojo.Device" >
+    insert into truck_device (id, admin_id, product_id, 
+      category_no, device_no, create_time, 
+      update_time,device_name,factory_no)
+    values (#{id,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{categoryNo,jdbcType=INTEGER}, #{deviceNo}, now(),
+      now(),#{deviceName},#{factoryNo})
+  </insert>
+  <insert id="insertSelective" parameterType="com.truck.pojo.Device" useGeneratedKeys="true" keyProperty="id">
+    insert into truck_device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="deviceNo != null" >
+        device_no,
+      </if>
+        create_time,
+        update_time,
+      <if test="deviceName != null" >
+        device_name,
+      </if>
+      <if test="factoryNo != null" >
+        factory_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=INTEGER},
+      </if>
+      <if test="deviceNo != null" >
+        #{deviceNo},
+      </if>
+      now(),
+      now(),
+      <if test="deviceName != null" >
+        #{deviceName},
+      </if>
+      <if test="factoryNo != null" >
+        #{factoryNo},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.truck.pojo.Device" >
+    update truck_device
+    <set >
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=INTEGER},
+      </if>
+      <if test="deviceNo != null" >
+        device_no = #{deviceNo},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        update_time = now(),
+      <if test="deviceName != null" >
+        device_name =#{deviceName},
+      </if>
+      <if test="factoryNo != null" >
+        factory_no =#{factoryNo},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.truck.pojo.Device" >
+    update truck_device
+    set admin_id = #{adminId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      category_no = #{categoryNo,jdbcType=INTEGER},
+      device_no = #{deviceNo},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now(),device_name =#{deviceName},
+      factory_no =#{factoryNo}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <delete id="deleteByDeviceIdAdminId" parameterType="map" >
+    delete from truck_device
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+  </delete>
+
+  <select id="selectByIdAdminId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+    order by create_time
+  </select>
+
+  <select id="selectByAdminIdDate" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from truck_device
+    <where>
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    order by create_time
+  </select>
+
+  <select id="selectByAdminIdNo" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from truck_device
+    <where>
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="productId!=null">
+        and product_id = #{productId}
+      </if>
+      <if test="categoryNo!=null">
+        and category_no = #{categoryNo}
+      </if>
+      <if test="deviceNo!=null">
+        and device_no = #{deviceNo}
+      </if>
+    </where>
+    order by update_time desc
+  </select>
+
+  <select id="selectByAdminIdNoStatusNoUsing" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from truck_device
+    <where>
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="productId!=null">
+        and product_id = #{productId}
+      </if>
+      <if test="categoryNo!=null">
+        and category_no = #{categoryNo}
+      </if>
+      <if test="deviceNo!=null">
+        and device_no = #{deviceNo}
+      </if>
+      and id not in(
+      select device_id from truck_device_admin where status=1
+      )
+    </where>
+    order by create_time
+  </select>
+
+  <select id="checkDeviceNo" resultType="int" parameterType="string">
+    select count(1) from truck_device where device_no=#{deviceNo}
+    <if test="categoryNo!=null">
+      and category_no = #{categoryNo}
+    </if>
+  </select>
+
+
+</mapper>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.truck.dao.OilMapper" >
+  <resultMap id="BaseResultMap" type="com.truck.pojo.Oil" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="driver_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="device_oil" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, admin_id, device_id, driver_id, device_oil, create_time, update_time,price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from truck_device_oil
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from truck_device_oil
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.truck.pojo.Oil" >
+    insert into truck_device_oil (id, admin_id, device_id, 
+      driver_id, device_oil, create_time, 
+      update_time,price)
+    values (#{id,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER}, 
+      #{driverId,jdbcType=INTEGER}, #{deviceOil,jdbcType=BIGINT}, now(),
+      now(),#{price,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.truck.pojo.Oil" useGeneratedKeys="true" keyProperty="id">
+    insert into truck_device_oil
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="driverId != null" >
+        driver_id,
+      </if>
+      <if test="deviceOil != null" >
+        device_oil,
+      </if>
+        create_time,
+        update_time,
+      <if test="price != null" >
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null" >
+        #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceOil != null" >
+        #{deviceOil,jdbcType=BIGINT},
+      </if>
+      now(),
+      now(),
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.truck.pojo.Oil" >
+    update truck_device_oil
+    <set >
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null" >
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceOil != null" >
+        device_oil = #{deviceOil,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        update_time = now(),
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.truck.pojo.Oil" >
+    update truck_device_oil
+    set admin_id = #{adminId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=INTEGER},
+      driver_id = #{driverId,jdbcType=INTEGER},
+      device_oil = #{deviceOil,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now(),
+      price = #{price,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+  <delete id="deleteByIdAdminId" parameterType="map" >
+    delete from truck_device_oil
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+  </delete>
+
+  <select id="selectByIdAdminId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_oil
+    where id = #{id,jdbcType=INTEGER}
+    <if test="adminId!=null">
+      and admin_id = #{adminId}
+    </if>
+    order by create_time
+  </select>
+
+  <select id="selectByAdminIdDate" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from truck_device_oil
+    <where>
+
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="deviceId!=null">
+        and device_id = #{deviceId}
+      </if>
+      <if test="driverId!=null">
+        and driver_id = #{driverId}
+      </if>
+      <if test="categoryNo!=null">
+        and device_id in(select id from truck_device where category_no=#{categoryNo})
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') =  DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    order by create_time
+  </select>
+
+  <select id="selectNumByAdminIdDate" resultType="map" parameterType="map" >
+    select a.deviceOil ,a.totalPrice from(
+    select
+    sum(device_oil) as deviceOil,sum(price) as totalPrice
+    from truck_device_oil
+    <where>
+
+      <if test="adminId!=null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="deviceId!=null">
+        and device_id = #{deviceId}
+      </if>
+      <if test="driverId!=null">
+        and driver_id = #{driverId}
+      </if>
+      <if test="categoryNo!=null">
+        and device_id in(select id from truck_device where category_no=#{categoryNo})
+      </if>
+
+      <if test="searchDate != null">
+        and DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(#{searchDate,jdbcType=INTEGER},'%Y-%m-%d')
+      </if>
+      <if test="beginDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') >=  DATE_FORMAT(#{beginDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[
+        and DATE_FORMAT(create_time,'%Y-%m-%d') <=  DATE_FORMAT(#{endDate,jdbcType=INTEGER},'%Y-%m-%d')
+        ]]>
+      </if>
+    </where> ) a
+  </select>
+</mapper>
